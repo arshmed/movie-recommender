@@ -132,7 +132,7 @@ class _ContentPageState extends State<ContentPage> {
       if (snapshot.hasData) {
         return Container(
           width: MediaQuery.of(context).size.width,
-          height: 207,
+          height: 210,
           color: bgColor,
           child: Trends(snapshot),
         );
@@ -159,7 +159,7 @@ class _ContentPageState extends State<ContentPage> {
           Stack(children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: 1320,
+              height: 1330,
               color: Colors.black,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

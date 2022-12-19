@@ -11,9 +11,9 @@ class MovieApiProvider{
   final baseUrl = "https://api.themoviedb.org/3/movie";
 
   Future<ItemModel> fetchPopularMovieList() async{
-    print('entered');
+    //print('entered');
     final response = await client.get("https://api.themoviedb.org/3/movie/popular?api_key=$apiKey");
-    print(response.body.toString());
+    //print(response.body.toString());
     if(response.statusCode == 200){
       return ItemModel.fromJson(json.decode(response.body));
     }
@@ -23,9 +23,9 @@ class MovieApiProvider{
   }
 
   Future<ItemModel> fetchTopRatedMovieList() async{
-    print('entered');
+    //print('entered');
     final response = await client.get("https://api.themoviedb.org/3/movie/top_rated?api_key=$apiKey");
-    print(response.body.toString());
+    //print(response.body.toString());
     if(response.statusCode == 200){
       return ItemModel.fromJson(json.decode(response.body));
     }
@@ -35,9 +35,9 @@ class MovieApiProvider{
   }
 
   Future<ItemModel> fetchUpcomingMovieList() async{
-    print('entered');
+    //print('entered');
     final response = await client.get("https://api.themoviedb.org/3/movie/upcoming?api_key=$apiKey");
-    print(response.body.toString());
+    //print(response.body.toString());
     if(response.statusCode == 200){
       return ItemModel.fromJson(json.decode(response.body));
     }
@@ -47,9 +47,9 @@ class MovieApiProvider{
   }
 
   Future<ItemModel> fetchNowPlayingMovieList() async{
-    print('entered');
+    //print('entered');
     final response = await client.get("https://api.themoviedb.org/3/movie/now_playing?api_key=$apiKey");
-    print(response.body.toString());
+    //print(response.body.toString());
     if(response.statusCode == 200){
       return ItemModel.fromJson(json.decode(response.body));
     }
