@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:moviee/ui/bottom_nav_bar.dart';
 import 'package:moviee/ui/colors.dart';
 import 'package:moviee/ui/homescreen.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
@@ -13,9 +14,11 @@ Future main() async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'Moviee',
-    home: SplashScreen(),
+    home: MainPage(),
   ));
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({key});
