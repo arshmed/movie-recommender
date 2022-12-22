@@ -1,11 +1,15 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:moviee/ui/colors.dart';
 import 'package:moviee/ui/homescreen.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'Moviee',
@@ -47,40 +51,34 @@ class SplashScreen extends StatefulWidget {
 }
 
 class MyCustomRoute<T> extends MaterialPageRoute<T> {
-  MyCustomRoute(
-      {  WidgetBuilder builder,  RouteSettings settings })
+  MyCustomRoute({WidgetBuilder builder, RouteSettings settings})
       : super(builder: builder, settings: settings);
 
   @override
-  Widget buildTransitions(BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child) {
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
     if (settings.name == '/') {
       return child;
     }
-      // Fades between routes. (If you don't want any animation,
-      // just return child.)
-      return FadeTransition(opacity: animation, child: child);
+    // Fades between routes. (If you don't want any animation,
+    // just return child.)
+    return FadeTransition(opacity: animation, child: child);
   }
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-  void NavigationPage(){
+  void NavigationPage() {
     Navigator.push(
-        context,
-       MyCustomRoute(builder: (context) => new HomeScreen())
-        );
+        context, MyCustomRoute(builder: (context) => new HomeScreen()));
   }
 
-  startTime() async{
+  startTime() async {
     var _duration = new Duration(seconds: 2);
     return Timer(_duration, NavigationPage);
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     startTime();
   }
@@ -93,14 +91,13 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Colors.black,
-                  bgColor,
-                ],
-              )
-          ),
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              Colors.black,
+              bgColor,
+            ],
+          )),
           child: Center(
             child: GradientText(
               'MOVIEE',
@@ -119,5 +116,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
-
