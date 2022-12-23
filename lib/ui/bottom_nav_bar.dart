@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import '../main.dart';
 import '../ui/profile.dart';
 import '../ui/homescreen.dart';
 
@@ -30,20 +28,20 @@ class _MainPageState extends State<MainPage>{
       backgroundColor: Colors.black,
       labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
       selectedIndex: index,
-      animationDuration: Duration(seconds: 3),
+      animationDuration: Duration(seconds: 2),
       onDestinationSelected:(index) =>
       setState(() => this.index=index),
       destinations: [
-        NavigationDestination(icon: Icon(Icons.home,color: Colors.white),
+        NavigationDestination(icon: Icon(Icons.home,color: Colors.grey),
             selectedIcon: Icon(Icons.home),
             label: "Home"),
-        NavigationDestination(icon: Icon(Icons.person,color: Colors.white),
+        NavigationDestination(icon: Icon(Icons.person,color: Colors.grey),
             selectedIcon: Icon(Icons.person),
             label: "Profile"),
-        NavigationDestination(icon: Icon(Icons.sentiment_very_satisfied_outlined,color: Colors.white),
+        NavigationDestination(icon: Icon(Icons.sentiment_very_satisfied_outlined,color: Colors.grey),
             selectedIcon: Icon(Icons.sentiment_very_satisfied_outlined),
             label: "I feel lucky"),
-        NavigationDestination(icon: Icon(Icons.search,color: Colors.white),
+        NavigationDestination(icon: Icon(Icons.search,color: Colors.grey),
             selectedIcon: Icon(Icons.search),
             label: "Search"),
 

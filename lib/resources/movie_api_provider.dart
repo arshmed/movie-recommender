@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' show Client;
 
+import '../model/genre_model.dart';
 import '../model/item_model.dart';
 
 class MovieApiProvider{
@@ -12,7 +13,7 @@ class MovieApiProvider{
 
   Future<ItemModel> fetchPopularMovieList() async{
     //print('entered');
-    final response = await client.get("https://api.themoviedb.org/3/movie/popular?api_key=$apiKey");
+    final response = await client.get("$baseUrl/popular?api_key=$apiKey");
     //print(response.body.toString());
     if(response.statusCode == 200){
       return ItemModel.fromJson(json.decode(response.body));
@@ -24,7 +25,7 @@ class MovieApiProvider{
 
   Future<ItemModel> fetchTopRatedMovieList() async{
     //print('entered');
-    final response = await client.get("https://api.themoviedb.org/3/movie/top_rated?api_key=$apiKey");
+    final response = await client.get("$baseUrl/top_rated?api_key=$apiKey");
     //print(response.body.toString());
     if(response.statusCode == 200){
       return ItemModel.fromJson(json.decode(response.body));
@@ -36,7 +37,7 @@ class MovieApiProvider{
 
   Future<ItemModel> fetchUpcomingMovieList() async{
     //print('entered');
-    final response = await client.get("https://api.themoviedb.org/3/movie/upcoming?api_key=$apiKey");
+    final response = await client.get("$baseUrl/upcoming?api_key=$apiKey");
     //print(response.body.toString());
     if(response.statusCode == 200){
       return ItemModel.fromJson(json.decode(response.body));
@@ -48,7 +49,7 @@ class MovieApiProvider{
 
   Future<ItemModel> fetchNowPlayingMovieList() async{
     //print('entered');
-    final response = await client.get("https://api.themoviedb.org/3/movie/now_playing?api_key=$apiKey");
+    final response = await client.get("$baseUrl/now_playing?api_key=$apiKey");
     //print(response.body.toString());
     if(response.statusCode == 200){
       return ItemModel.fromJson(json.decode(response.body));
@@ -58,6 +59,17 @@ class MovieApiProvider{
     }
   }
 
+  Future<GenreModel> fetchGenresList() async{
+    //print('entered');
+    final response = await client.get("https://api.themoviedb.org/3/genre/movie/list?api_key=$apiKey");
+    //print(response.body.toString());
+    if(response.statusCode == 200){
+      return GenreModel.fromJson(json.decode(response.body));
+    }
+    else {
+      throw Exception("Failed to load movies");
+    }
+  }
 
 
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moviee/blocs/movies_bloc.dart';
+import 'package:moviee/model/genre_model.dart';
 
+import '../blocs/genre_bloc.dart';
 import '../model/item_model.dart';
 import 'colors.dart';
 import 'dart:math';
@@ -24,57 +26,69 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: ContentPage(),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: bgColor,
+        child: PreLoadContent(),
+      ),
+    );
+  }
+  
+}
+
+class PreLoadContent extends StatefulWidget {
+  const PreLoadContent({Key key}) : super(key: key);
+
+  @override
+  State<PreLoadContent> createState() => _PreLoadContentState();
+}
+
+class _PreLoadContentState extends State<PreLoadContent> {
+  @override
+  Widget build(BuildContext context) {
+    bloc_genres.fetchAllGenres();
+    return StreamBuilder(
+      stream: bloc_genres.allGenres,
+      builder: (context, AsyncSnapshot<GenreModel> snapshot) {
+      if (snapshot.hasData) {
+        return ContentPage(snapshot);
+      }
+      else if (snapshot.hasError) {
+        print('something went wrong');
+        return Text(snapshot.error.toString());
+      }
+      else
+        return Center(child: CircularProgressIndicator());
+    },
     );
   }
 }
 
+
 class ContentPage extends StatefulWidget {
-   ContentPage({Key key}) : super(key: key);
-  AsyncSnapshot<ItemModel> snapshot;
+  AsyncSnapshot<GenreModel> snapshotGenres;
+  ContentPage(this.snapshotGenres);
+
   @override
   State<ContentPage> createState() => _ContentPageState();
 }
 
 class _ContentPageState extends State<ContentPage> {
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   Widget getPopularMovies(){
     return StreamBuilder(stream: bloc.allMovies, builder: (context, AsyncSnapshot<ItemModel> snapshot) {
       if (snapshot.hasData) {
-        return TextButton(
-          onPressed: (){
-            return showBottomSheet(context: context, builder: (context){
-              return Container(
-                color: Colors.black87,
-                child: Column(
-                  children: [
-                    Container(
-                      //margin: EdgeInsets.only(top: 40),
-                      height: 400,
-                      width: 500,
-                      child: Image.network(snapshot.data.results[0].poster_path,
-                        height: 320,
-                        width: double.infinity,
-                        fit: BoxFit.fill,),
-                    ),
-                    Text(snapshot.data.results[0].title,style: TextStyle(
-                      fontSize: 32,
-                      color: Colors.white,
-                    ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ],
-                ),
-              );
-            }
-            );
-          },
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 215,
-            color: bgColor,
-            child: Trends(snapshot),
-          ),
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          height: 215,
+          color: bgColor,
+          child: Trends(snapshot),
         );
       }
       else if (snapshot.hasError) {
