@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;
@@ -45,7 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -53,23 +54,35 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               // ignore: prefer_const_literals_to_create_immutables
               children: [
-                const Icon(
-                  Icons.phone_android,
-                  size: 100,
+                Center(
+                  child: GradientText(
+                    'MOVIEE',
+                    style: TextStyle(
+                      fontSize: 50.0,
+                    ),
+                    colors: [
+                      Colors.blue,
+                      Colors.red,
+                      Colors.teal,
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 75,
                 ),
                 const Text(
                   "Hello there!",
-                  style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 const Text(
                   "Register below,with your details.",
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
                 const SizedBox(
                   height: 50,
@@ -137,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 45),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
@@ -167,7 +180,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     const Text(
                       "I am a member?",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                     GestureDetector(
                       onTap: widget.showLoginPage,

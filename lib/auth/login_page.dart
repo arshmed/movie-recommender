@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -34,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -42,23 +43,35 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               // ignore: prefer_const_literals_to_create_immutables
               children: [
-                const Icon(
-                  Icons.phone_android,
-                  size: 100,
+                Center(
+                  child: GradientText(
+                    'MOVIEE',
+                    style: const TextStyle(
+                      fontSize: 50.0,
+                    ),
+                    colors: [
+                      Colors.blue,
+                      Colors.red,
+                      Colors.teal,
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 75,
                 ),
                 const Text(
                   "Hello Again!",
-                  style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 const Text(
                   "Welcome back, you\'ve been missed!",
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
                 const SizedBox(
                   height: 50,
@@ -83,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -105,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 40),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
@@ -128,19 +141,20 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 25,
+                  height: 45,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
                       "Not a member?",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                     GestureDetector(
                       onTap: widget.showRegisterPage,
                       child: const Text(
-                        "Register Now!",
+                        " Register Now!",
                         style: TextStyle(color: Colors.blue),
                       ),
                     )
