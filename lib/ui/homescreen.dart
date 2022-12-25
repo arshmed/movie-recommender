@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:moviee/blocs/genre_bloc.dart';
 import 'package:moviee/blocs/movies_bloc.dart';
-
+import 'package:moviee/ui/movie_detail.dart';
+import '../model/genre_model.dart';
 import '../model/item_model.dart';
 import 'colors.dart';
-import 'dart:math';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -24,57 +25,67 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: ContentPage(),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: PreLoadContent(),
+      ),
     );
   }
 }
 
+class PreLoadContent extends StatefulWidget {
+  const PreLoadContent({Key key}) : super(key: key);
+
+  @override
+  State<PreLoadContent> createState() => _PreLoadContentState();
+}
+
+class _PreLoadContentState extends State<PreLoadContent> {
+  @override
+  Widget build(BuildContext context) {
+    bloc_genres.fetchAllGenres();
+    return StreamBuilder(stream: bloc_genres.allGenres, builder: (context, AsyncSnapshot<GenreModel> snapshot) {
+      if (snapshot.hasData) {
+        return ContentPage(snapshot);
+      }
+      else if (snapshot.hasError) {
+        print('something went wrong');
+        return Text(snapshot.error.toString());
+      }
+      else
+        return Center(child: CircularProgressIndicator());
+    },
+    );
+  }
+}
+
+
 class ContentPage extends StatefulWidget {
-   ContentPage({Key key}) : super(key: key);
-  AsyncSnapshot<ItemModel> snapshot;
+
+  AsyncSnapshot<GenreModel> snapshotGenres;
+  ContentPage(this.snapshotGenres);
+
   @override
   State<ContentPage> createState() => _ContentPageState();
 }
 
 class _ContentPageState extends State<ContentPage> {
 
+  @override
+  void initState() {
+    // TODO: implement initState
+      super.initState();
+  }
+
   Widget getPopularMovies(){
     return StreamBuilder(stream: bloc.allMovies, builder: (context, AsyncSnapshot<ItemModel> snapshot) {
       if (snapshot.hasData) {
-        return TextButton(
-          onPressed: (){
-            return showBottomSheet(context: context, builder: (context){
-              return Container(
-                color: Colors.black87,
-                child: Column(
-                  children: [
-                    Container(
-                      //margin: EdgeInsets.only(top: 40),
-                      height: 400,
-                      width: 500,
-                      child: Image.network(snapshot.data.results[0].poster_path,
-                        height: 320,
-                        width: double.infinity,
-                        fit: BoxFit.fill,),
-                    ),
-                    Text(snapshot.data.results[0].title,style: TextStyle(
-                      fontSize: 32,
-                      color: Colors.white,
-                    ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ],
-                ),
-              );
-            }
-            );
-          },
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 215,
-            color: bgColor,
-            child: Trends(snapshot),
-          ),
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          height: 215,
+          color: bgColor,
+          child: Trends(snapshot,widget.snapshotGenres),
         );
       }
       else if (snapshot.hasError) {
@@ -94,7 +105,7 @@ class _ContentPageState extends State<ContentPage> {
           width: MediaQuery.of(context).size.width,
           height: 215,
           color: bgColor,
-          child: Trends(snapshot),
+          child: Trends(snapshot,widget.snapshotGenres),
         );
       }
       else if (snapshot.hasError) {
@@ -114,7 +125,7 @@ class _ContentPageState extends State<ContentPage> {
           width: MediaQuery.of(context).size.width,
           height: 215,
           color: bgColor,
-          child: Trends(snapshot),
+          child: Trends(snapshot,widget.snapshotGenres),
         );
       }
       else if (snapshot.hasError) {
@@ -134,7 +145,7 @@ class _ContentPageState extends State<ContentPage> {
           width: MediaQuery.of(context).size.width,
           height: 210,
           color: bgColor,
-          child: Trends(snapshot),
+          child: Trends(snapshot,widget.snapshotGenres),
         );
       }
       else if (snapshot.hasError) {
@@ -277,7 +288,8 @@ class _ContentPageState extends State<ContentPage> {
 class Trends extends StatefulWidget {
 
   AsyncSnapshot<ItemModel> snapshot;
-  Trends(this.snapshot);
+  AsyncSnapshot<GenreModel> snapshotGenres;
+  Trends(this.snapshot, this.snapshotGenres);
 
   @override
   State<Trends> createState() => _TrendsState();
@@ -291,22 +303,36 @@ class _TrendsState extends State<Trends> {
       scrollDirection: Axis.horizontal,
       itemCount: widget.snapshot.data.results.length,
       itemBuilder: (context, index){
+
+        String genres = widget.snapshotGenres.data
+            .getGenre(widget.snapshot.data.results[index].genre_ids);
+
         return Container(
           height: 200,
           child: Row(
             children: [
-              Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Image.network(
-                        widget.snapshot.data.results[index].poster_path,
-                      height: 210,
-                      width: 140,
-                      //fit: BoxFit.fill,
+              InkWell(
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MovieDetail(widget.snapshot.data.results[index],genres),
+                      ),
+                  );
+                },
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Image.network(
+                          widget.snapshot.data.results[index].poster_path,
+                        height: 210,
+                        width: 140,
+                        //fit: BoxFit.fill,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               SizedBox(width: 8,),
             ],
@@ -354,8 +380,8 @@ class _ItemsLoadState extends State<ItemsLoad> {
 
   @override
   Widget build(BuildContext context) {
-    Random random = new Random();
-    int randomNumber = random.nextInt(5);
+    //Random random =  Random();
+    //int randomNumber = random.nextInt(5);
     return Column(
       children: [
         ClipRRect(

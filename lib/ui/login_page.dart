@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:moviee/ui/profile.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class LoginPage extends StatefulWidget {
   //const LoginPage({super.key});
@@ -29,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -37,9 +39,18 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               // ignore: prefer_const_literals_to_create_immutables
               children: [
-                Icon(
-                  Icons.phone_android,
-                  size: 100,
+                Center(
+                  child: GradientText(
+                    'MOVIEE',
+                    style: TextStyle(
+                      fontSize: 56.0,
+                    ),
+                    colors: [
+                      Colors.blue,
+                      Colors.red,
+                      Colors.teal,
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 75,
@@ -47,14 +58,14 @@ class _LoginPageState extends State<LoginPage> {
                 Text(
                   "Hello Again!",
                   style: const TextStyle(
-                      fontSize: 35, fontWeight: FontWeight.bold),
+                      fontSize: 35, fontWeight: FontWeight.bold,color:Colors.white),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 Text(
                   "Welcome back, you\'ve been missed!",
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20,color:Colors.white),
                 ),
                 SizedBox(
                   height: 50,
@@ -105,7 +116,10 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
-                    onTap: signIn,
+                    onTap: (){
+                      signIn;
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(),));
+                    },
                     child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -131,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Text(
                       "Not a member?",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold,color:Colors.white),
                     ),
                     Text(
                       "Register Now!",
