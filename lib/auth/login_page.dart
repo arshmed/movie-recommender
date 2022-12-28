@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
+import 'forgot_password.dart';
+
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
 
@@ -116,6 +118,31 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return ForgotPasswordPage();
+                            },
+                          ));
+                        },
+                        child: Text(
+                          "Forgot password?",
+                          style: TextStyle(
+                              color: Colors.blue, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 40),
