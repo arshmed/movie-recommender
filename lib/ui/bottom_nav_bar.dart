@@ -29,7 +29,7 @@ class _MainPageState extends State<MainPage>{
       backgroundColor: Colors.black,
       labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
       selectedIndex: index,
-      animationDuration: Duration(seconds: 3),
+      animationDuration: Duration(seconds: 2),
       onDestinationSelected:(index) =>
       setState(() => this.index=index),
       destinations: [

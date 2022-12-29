@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../model/item_model.dart';
 import 'colors.dart';
@@ -46,7 +47,7 @@ class _ContentPageState extends State<ContentPage> {
       child: Stack(
         children: [
           Container(
-            height: 360,
+            height: 380,
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.fitWidth,
@@ -56,7 +57,16 @@ class _ContentPageState extends State<ContentPage> {
             ),
           ),
           Positioned(
-            top: 280,
+            left: 15,
+            top: 40,
+            child: IconButton(
+                color: Colors.red,
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.arrow_back_ios,  color: Colors.white, size: 22,)
+            ),
+          ),
+          Positioned(
+            top: 320,
             child: Container(
               padding: EdgeInsets.only(left: 20, top: 8),
               width: _width,
@@ -78,7 +88,7 @@ class _ContentPageState extends State<ContentPage> {
             ),
           ),
           Positioned(
-              top: 260,
+              top: 308,
               left: 20,
               child: Container(
                 width: _width - 20,
@@ -87,13 +97,13 @@ class _ContentPageState extends State<ContentPage> {
           ),
           Positioned(
             left: 20,
-            top: 300,
+            top: 340,
               child: GenresItems(widget.genres),
           ),
           Positioned(
             left: 20,
             right: 20,
-            top: 370,
+            top: 390,
             child: Container(
               width: MediaQuery.of(context).size.width -40,
               height: 0.5,
@@ -140,14 +150,13 @@ class _ContentPageState extends State<ContentPage> {
                                   text: widget.data.vote_average.toString(),
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
+                                    fontSize: 18,
                                   ),
                                   children: <TextSpan>[
                                     TextSpan(
                                       text: ' / 10',
                                       style: TextStyle(
-                                        color: Colors.white, fontSize: 14
+                                        color: Colors.white, fontSize: 18
                                       ),
                                     ),
                                   ],
@@ -179,7 +188,7 @@ class _ContentPageState extends State<ContentPage> {
           Positioned(
             left: 20,
             right: 20,
-            top: 490,
+            top: 480,
             child: Container(
               width: MediaQuery.of(context).size.width -40,
               height: 0.5,
@@ -200,7 +209,7 @@ class _ContentPageState extends State<ContentPage> {
                     'Description',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4,),
@@ -208,7 +217,7 @@ class _ContentPageState extends State<ContentPage> {
                     widget.data.overview,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                     ),
                   ),
                 ],
@@ -270,6 +279,7 @@ class _GenresItemsState extends State<GenresItems> {
       var items = genre.split(',');
 
       for(int i=0; i<items.length; i++){
+        if(i < 3)
         values.add(GenreItem(items[i]));
       }
       await Future.delayed(Duration(seconds: 0));
