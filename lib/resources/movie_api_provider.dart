@@ -4,6 +4,7 @@ import 'package:http/http.dart' show Client;
 
 import '../model/genre_model.dart';
 import '../model/item_model.dart';
+import '../model/trailer_model.dart';
 
 class MovieApiProvider{
 
@@ -68,6 +69,18 @@ class MovieApiProvider{
     }
     else {
       throw Exception("Failed to load movies");
+    }
+  }
+
+  Future<TrailerModel> fetchTrailers(int movie_id) async{
+    //print('entered');
+    final response = await client.get(Uri.parse(baseUrl + "/" + movie_id.toString() + "/videos?api_key=$apiKey"));
+    //print(response.body.toString());
+    if(response.statusCode == 200){
+      return TrailerModel.fromJson(json.decode(response.body));
+    }
+    else {
+      throw Exception("Failed to load post");
     }
   }
 

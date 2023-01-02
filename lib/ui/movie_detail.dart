@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import '../blocs/trailer_bloc.dart';
 import '../model/item_model.dart';
+import '../model/trailer_model.dart';
 import 'colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MovieDetail extends StatefulWidget {
 
@@ -13,13 +15,30 @@ class MovieDetail extends StatefulWidget {
   @override
   State<MovieDetail> createState() => _MovieDetailState();
 }
-
+String backdrop_path = "";
 class _MovieDetailState extends State<MovieDetail> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    backdrop_path = widget.data.backdrop_path;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ContentPage(widget.data,widget.genres),
     );
+  }
+}
+
+_launchURL(String _url) async{
+  if(await canLaunch(_url)){
+    await launch(_url);
+  }
+  else{
+    throw 'Could not launch $_url';
   }
 }
 
@@ -88,7 +107,7 @@ class _ContentPageState extends State<ContentPage> {
             ),
           ),
           Positioned(
-              top: 308,
+              top: 330,
               left: 20,
               child: Container(
                 width: _width - 20,
@@ -97,130 +116,136 @@ class _ContentPageState extends State<ContentPage> {
           ),
           Positioned(
             left: 20,
-            top: 340,
+            top: 370,
               child: GenresItems(widget.genres),
           ),
           Positioned(
-            left: 20,
-            right: 20,
-            top: 390,
-            child: Container(
-              width: MediaQuery.of(context).size.width -40,
-              height: 0.5,
-              color: textColor,
-            ),
+            left: 22,
+            top: 410,
+            child: Text(widget.data.release_date.substring(0,4), style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.bold),),
           ),
           Positioned(
-            top: 370,
+            top: 435,
             child: Container(
-              margin: EdgeInsets.only(left: 20),
-              width: MediaQuery.of(context).size.width,
-              height: 120,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: (MediaQuery.of(context).size.width -40) / 3,
-                        height: 120,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(widget.data.popularity.toStringAsFixed(2), style: TextStyle(color: popularityColor, fontSize: 24, fontWeight: FontWeight.bold),),
-                              Text('Popularity', style: TextStyle(color: Colors.white, ),),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: (MediaQuery.of(context).size.width -40) / 3,
-                        height: 120,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.star,
-                                color: iconColor,
-                                size: 28,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: widget.data.vote_average.toString(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: ' / 10',
-                                      style: TextStyle(
-                                        color: Colors.white, fontSize: 18
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: (MediaQuery.of(context).size.width -40) / 3,
-                        height: 120,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(widget.data.vote_count.toString(), style: TextStyle(color: Colors.blue, fontSize: 24, fontWeight: FontWeight.bold),),
-                              Text('Vote Count', style: TextStyle(color: Colors.white, ),),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            left: 20,
-            right: 20,
-            top: 480,
-            child: Container(
-              width: MediaQuery.of(context).size.width -40,
-              height: 0.5,
-              color: textColor,
-            ),
-          ),
-          Positioned(
-            left: 20,
-            right: 20,
-            top: 500,
-            child: Container(
-              width: MediaQuery.of(context).size.width -40,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(
-                    'Description',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 4,),
-                  Text(
-                    widget.data.overview,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
+              width: _width,
+              height: MediaQuery.of(context).size.height-370,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width -40,
+                      height: 0.5,
+                      color: textColor,
                     ),
-                  ),
-                ],
+                    Container(
+                      margin: EdgeInsets.only(left: 20),
+                      width: MediaQuery.of(context).size.width,
+                      height: 90,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: (MediaQuery.of(context).size.width -40) / 3,
+                            height: 120,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Text(widget.data.popularity.toStringAsFixed(2), style: TextStyle(color: popularityColor, fontSize: 24, fontWeight: FontWeight.bold),),
+                                  // Text('Popularity', style: TextStyle(color: Colors.white, ),),
+                                  //Text(widget.data.release_date.substring(0,4), style: TextStyle(color: Colors.blue, fontSize: 24, fontWeight: FontWeight.bold),)
+                                  Text(widget.data.popularity.toStringAsFixed(0), style: TextStyle(color: Colors.green, fontSize: 24, fontWeight: FontWeight.bold),),
+                                  Text('Popularity', style: TextStyle(color: Colors.white, ),),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: (MediaQuery.of(context).size.width -40) / 3,
+                            height: 120,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: iconColor,
+                                    size: 28,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: widget.data.vote_average.toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                      ),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: ' / 10',
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 18
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: (MediaQuery.of(context).size.width -40) / 3,
+                            height: 120,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+
+                                  Text(widget.data.vote_count, style: TextStyle(color: Colors.blue, fontSize: 24, fontWeight: FontWeight.bold),),
+                                  Text('Vote Count', style: TextStyle(color: Colors.white, ),),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 5),
+                      width: MediaQuery.of(context).size.width -40,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Text(
+                            'Description',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 5,),
+                          Text(
+                            widget.data.overview,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 16,),
+                          Text('Trailers',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 16,),
+                          PreLoadContent(widget.data.id),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -301,4 +326,110 @@ class _GenresItemsState extends State<GenresItems> {
     }
 
 }
+
+class PreLoadContent extends StatefulWidget {
+
+  int movieId;
+  PreLoadContent(this.movieId);
+
+  @override
+  State<PreLoadContent> createState() => _PreLoadContentState();
+}
+
+class _PreLoadContentState extends State<PreLoadContent> {
+  @override
+  Widget build(BuildContext context) {
+    bloc_trailer.fetchAllTrailers(widget.movieId);
+    return StreamBuilder(
+      stream: bloc_trailer.allTrailers,
+      builder: (context, AsyncSnapshot<TrailerModel> snapshot){
+        if(snapshot.hasData){
+          if(snapshot.data.results.length > 0){
+            int itemRowCount = (snapshot.data.results.length/2).round();
+            double _height = itemRowCount * 175.0;
+            return Container(
+              width: MediaQuery.of(context).size.width - 40,
+                height: _height,
+                child: TrailerPage(snapshot),
+            );
+          }
+          else return Text(
+            'Not Found Trailer',
+            style: TextStyle(color: Colors.white),
+          );
+        }
+        else if(snapshot.hasError){
+          return Text(snapshot.error.toString());
+        }
+        return Center(child: CircularProgressIndicator(),);
+      },
+    );
+  }
+}
+
+class TrailerPage extends StatefulWidget {
+
+  AsyncSnapshot<TrailerModel> snapshot;
+  TrailerPage(this.snapshot);
+
+  @override
+  State<TrailerPage> createState() => _TrailerPageState();
+}
+
+class _TrailerPageState extends State<TrailerPage> {
+  @override
+  Widget build(BuildContext context) {
+    double itemWidth = (MediaQuery.of(context).size.width -16) / 2;
+    return GridView.count(
+      padding: EdgeInsets.all(0),
+      crossAxisCount: 2,
+      childAspectRatio: (itemWidth / 155),
+      crossAxisSpacing: 16,
+      mainAxisSpacing: 22,
+      physics: NeverScrollableScrollPhysics(),
+      children: List<Widget>.generate(widget.snapshot.data.results.length, (index) {
+        return GridTile(
+         child: InkWell(
+           onTap: () => _launchURL("https://www.youtube.com/watch?v=" + widget.snapshot.data.results[index].key),
+           child: Container(
+             width: MediaQuery.of(context).size.width,
+             child: InkWell(
+               onTap: () => _launchURL("https://www.youtube.com/watch?v=" + widget.snapshot.data.results[index].key),
+               child: Wrap(
+                 children: [
+                   Container(
+                     margin: EdgeInsets.only(bottom:5),
+                     child: Stack(
+                       children: [
+                         Image.network(backdrop_path),
+                         Container(
+                           width: itemWidth,
+                           height: 100,
+                           color: Colors.black38,
+                         ),
+                         Positioned(
+                           top:36,
+                           left: (itemWidth -36 -16) / 2,
+                           child: Icon(Icons.play_circle_filled,size: 36,color:Colors.white),
+                         ),
+                       ],
+                     ),
+                   ),
+                   Text(
+                     widget.snapshot.data.results[index].name,
+                     style: TextStyle(color: Colors.white),
+                   ),
+                 ],
+               ),
+             ),
+           ),
+         ),
+        );
+      },
+      ),
+    );
+  }
+}
+
+
 

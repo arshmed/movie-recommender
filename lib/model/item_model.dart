@@ -29,7 +29,7 @@ class Result{
   bool video;
   var vote_average;
   String title;
-  double popularity;
+  num popularity;
   String poster_path;
   List<int> genre_ids=[];
   String backdrop_path;
@@ -51,7 +51,7 @@ class Result{
       genre_ids.add(result['genre_ids'][i]);
     }
 
-    backdrop_path=result['backdrop_path'].toString();
+    backdrop_path="https://image.tmdb.org/t/p/w185/"+result['backdrop_path'].toString();
     adult = result['adult'];
     overview=result['overview'];
     release_date=result['release_date'].toString();
@@ -63,14 +63,11 @@ class Result{
   String get get_backdrop_path => backdrop_path;
   List<int> get get_genre_ids => genre_ids;
   String get get_poster_path =>poster_path;
-  double get get_popularity => popularity;
+  num get get_popularity => popularity;
   String get get_title =>title;
   String get get_vote_average =>vote_average;
   bool get is_video => video;
   int get get_id => id;
   String get get_vote_count => vote_count;
-
-
-
 
 }
