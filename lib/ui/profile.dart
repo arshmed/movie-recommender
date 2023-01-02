@@ -1,59 +1,137 @@
 import 'package:flutter/material.dart';
 
-
 class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var card = new Card(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+      ),
+      home: MyHomePage(),
+    );
+  }
+}
 
-      color:Colors.black,
-      child: new Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+class MyHomePage extends StatefulWidget {
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+  int _selectedIndex = 0;
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,appBar: new AppBar(
+      centerTitle: true,
+      backgroundColor: Colors.black87,
+      title: new Text("Profile"),
+
+      leading: IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.arrow_back),
+      ),
+
+    ),
+
+      body: Column(
         children: [
-          new Divider(color: Colors.white,indent: 16.0,),
-          new ListTile(
-            leading: new Icon(Icons.person, color: Colors.white,size: 26.0,),
-            title: new Text("Information"
-              ,style: new TextStyle(color: Colors.white,fontWeight: FontWeight.w400),),
+          SizedBox(
+            height: 20,
           ),
-          new Divider(color: Colors.white,indent: 16.0,),
-          new ListTile(
-            leading: new Icon(Icons.favorite, color: Colors.white, size: 26.0,),
-            title: new Text("Favorites"
-              ,style: new TextStyle(color: Colors.white,fontWeight: FontWeight.w400),),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(onTap: (){},
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(35)),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                height: 48,
+                width: double.infinity,
+                child: Row(
+                  children: [ Icon(Icons.star),
+                    Text(
+                      "Information",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-          new Divider(color: Colors.white,indent: 16.0,),
-          new ListTile(
-            leading: new Icon(Icons.book, color: Colors.white, size: 26.0,),
-            title: new Text("History"
-              ,style: new TextStyle(color: Colors.white,fontWeight: FontWeight.w400),),
+          SizedBox(
+            height: 10,
           ),
-          new Divider(color: Colors.white,indent: 16.0,),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(onTap: (){},
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(35)),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                height: 48,
+                width: double.infinity,
+                child: Row(
+                  children: [ Icon(Icons.favorite),
+                    Text(
+                      "Favorites",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(onTap: (){},
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(35)),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                height: 48,
+                width: double.infinity,
+                child:Row(
+                  children: [Icon(Icons.book),
+                    Text(
+                      "History",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+
+              ),
+            ),
+          ),
         ],
       ),
-    );
-    final sizedBox = new Container(
-      child: new SizedBox(
-        height: 550.0,
-        child: card,
-      ),
-    );
-    final center = new Center(
-      child: sizedBox,
-    );
-    return new MaterialApp(
-
-
-        title: "",
-        home: new Scaffold(
-          backgroundColor: Colors.black,appBar: new AppBar(
-            centerTitle: true,
-            backgroundColor: Colors.black87,
-            title: new Text("Profile")
-        ),
-          body: center,
-        )
     );
   }
 }

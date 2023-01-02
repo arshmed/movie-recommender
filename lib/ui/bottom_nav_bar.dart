@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../ui/homescreen.dart';
 import 'main_page.dart';
-
+import 'i_feel_lucky.dart';
 class MainPage extends StatefulWidget {
 
   @override
@@ -13,6 +13,7 @@ class _MainPageState extends State<MainPage>{
   final screens=[
     HomeScreen(),
     MainPage1(),
+    Lucky(),
   ];
   @override
   Widget build(BuildContext context) => Scaffold(
