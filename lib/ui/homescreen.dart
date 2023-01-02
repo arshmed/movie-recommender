@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moviee/blocs/genre_bloc.dart';
@@ -92,8 +94,9 @@ class _ContentPageState extends State<ContentPage> {
         print('something went wrong');
         return Text(snapshot.error.toString());
       }
-      else
+      else {
         return Center(child: CircularProgressIndicator());
+      }
     },
     );
   }
@@ -343,32 +346,6 @@ class _TrendsState extends State<Trends> {
   }
 }
 
-
-
-// class ItemsLoad extends StatefulWidget {
-//   AsyncSnapshot<ItemModel> snapshot;
-//   ItemsLoad(this.snapshot);
-//   @override
-//   State<ItemsLoad> createState() => _ItemsLoadState();
-// }
-//
-// class _ItemsLoadState extends State<ItemsLoad> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView.builder(
-//       scrollDirection: Axis.horizontal,
-//       itemCount: widget.snapshot.data.results.length,
-//       itemBuilder: (context, index){
-//         return Column(
-//           children: [
-//             Image.network(widget.snapshot.data.results[index].poster_path),
-//           ],
-//         );
-//       },
-//     );
-//   }
-// }
-
 class ItemsLoad extends StatefulWidget {
   AsyncSnapshot<ItemModel> snapshot;
   ItemsLoad(this.snapshot);
@@ -380,14 +357,15 @@ class _ItemsLoadState extends State<ItemsLoad> {
 
   @override
   Widget build(BuildContext context) {
-    //Random random =  Random();
-    //int randomNumber = random.nextInt(5);
+    Random random =  Random();
+    int randomNumber = random.nextInt(5);
     return Column(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(20.0),
           child: Image.network(
-              'https://media.idownloadblog.com/wp-content/uploads/2014/12/interstellar-wide-space-film-movie-art-9-wallpaper.jpg',     //widget.snapshot.data.results[randomNumber].poster_path,
+              'https://media.idownloadblog.com/wp-content/uploads/2014/12/interstellar-wide-space-film-movie-art-9-wallpaper.jpg',
+            //widget.snapshot.data.results[randomNumber].poster_path,
             height: 320,
             width: double.infinity,
             fit: BoxFit.fill,
