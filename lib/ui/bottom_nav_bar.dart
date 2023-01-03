@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../auth/main_page.dart';
 import '../ui/homescreen.dart';
@@ -9,11 +10,13 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
+final user = FirebaseAuth.instance.currentUser;
+
 class _MainPageState extends State<MainPage> {
   int index = 0;
   final screens = [
     HomeScreen(),
-    MainPage1(),
+    LoginMainPage(),
     Lucky(),
   ];
   @override

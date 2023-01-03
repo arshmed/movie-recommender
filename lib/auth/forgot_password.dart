@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/retry.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key key}) : super(key: key);
@@ -46,16 +47,31 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.deepOrange[200],
+        backgroundColor: Colors.black,
         elevation: 0,
       ),
       body: Column(
         children: [
+          Center(
+            child: GradientText(
+              'MOVIEE',
+              style: const TextStyle(
+                fontSize: 50.0,
+              ),
+              colors: [
+                Colors.blue,
+                Colors.red,
+                Colors.teal,
+              ],
+            ),
+          ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
             child: Text(
               "Enter your e-mail, we'll send an e-mail to reset your password.",
+              style: TextStyle(color: Colors.white),
               textAlign: TextAlign.center,
             ),
           ),

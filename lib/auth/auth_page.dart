@@ -10,6 +10,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  // ilk olarak login page göster
   bool showLoginPage = true;
 
   void toggleScreens() {
@@ -22,6 +23,8 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     if (showLoginPage) {
+      //temel olarak login page göster
+
       return LoginPage(showRegisterPage: toggleScreens);
     } else {
       return RegisterPage(
