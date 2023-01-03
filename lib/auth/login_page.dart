@@ -16,14 +16,30 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //text controllers
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  // uygulamaya giriş için sign in methodu
+
   Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim());
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim());
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text(e.message.toString()),
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -61,6 +77,9 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 75,
                 ),
+
+                // Hello again!
+
                 const Text(
                   "Hello Again!",
                   style: TextStyle(
@@ -78,6 +97,9 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 50,
                 ),
+
+                // email text
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
@@ -100,6 +122,9 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 15,
                 ),
+
+                // password text
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
@@ -123,6 +148,9 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: 10,
                 ),
+
+                // forgot password
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Row(
@@ -146,6 +174,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 40),
+
+                // sign in button
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
@@ -170,6 +201,9 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 45,
                 ),
+
+//              Not a member button!
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -178,6 +212,9 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.white),
                     ),
+
+//                register işlemleri
+
                     GestureDetector(
                       onTap: widget.showRegisterPage,
                       child: const Text(
