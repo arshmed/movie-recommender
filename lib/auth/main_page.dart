@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:moviee/ui/login_home_page.dart';
-import 'package:moviee/ui/login_page.dart';
-import 'package:moviee/ui/profile.dart';
+import 'package:moviee/auth/auth_page.dart';
+import 'package:moviee/auth/login_home_page.dart';
+import 'package:moviee/auth/login_page.dart';
 
 class MainPage1 extends StatelessWidget {
   const MainPage1({Key key}) : super(key: key);
@@ -16,9 +16,9 @@ class MainPage1 extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return  LoginPage();
+              return HomePageLogin();
             } else {
-              return Profile();
+              return AuthPage();
             }
           }),
     );

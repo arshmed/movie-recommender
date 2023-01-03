@@ -1,11 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:moviee/ui/profile.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
+import 'forgot_password.dart';
+
 class LoginPage extends StatefulWidget {
-  //const LoginPage({super.key});
+  final VoidCallback showRegisterPage;
+
+  const LoginPage({Key key, this.showRegisterPage}) : super(key: key);
+  // const LoginPage({super.key, this.showRegisterPage});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -14,6 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   Future signIn() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -25,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -42,8 +48,8 @@ class _LoginPageState extends State<LoginPage> {
                 Center(
                   child: GradientText(
                     'MOVIEE',
-                    style: TextStyle(
-                      fontSize: 56.0,
+                    style: const TextStyle(
+                      fontSize: 50.0,
                     ),
                     colors: [
                       Colors.blue,
@@ -52,22 +58,24 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 75,
                 ),
-                Text(
+                const Text(
                   "Hello Again!",
-                  style: const TextStyle(
-                      fontSize: 35, fontWeight: FontWeight.bold,color:Colors.white),
+                  style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Text(
+                const Text(
                   "Welcome back, you\'ve been missed!",
-                  style: const TextStyle(fontSize: 20,color:Colors.white),
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
                 Padding(
@@ -81,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.only(left: 20),
                       child: TextField(
                         controller: _emailController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'E-mail',
                         ),
@@ -89,8 +97,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 10,
+                const SizedBox(
+                  height: 15,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -104,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextField(
                         controller: _passwordController,
                         obscureText: true,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Password',
                         ),
@@ -112,20 +120,42 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return ForgotPasswordPage();
+                            },
+                          ));
+                        },
+                        child: Text(
+                          "Forgot password?",
+                          style: TextStyle(
+                              color: Colors.blue, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
-                    onTap: (){
-                      signIn;
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(),));
-                    },
+                    onTap: signIn,
                     child: Container(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                           color: Colors.deepPurple,
                           borderRadius: BorderRadius.circular(12)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Sign In",
                           style: TextStyle(
@@ -137,19 +167,23 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 25,
+                const SizedBox(
+                  height: 45,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Not a member?",
-                      style: TextStyle(fontWeight: FontWeight.bold,color:Colors.white),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
                     ),
-                    Text(
-                      "Register Now!",
-                      style: TextStyle(color: Colors.blue),
+                    GestureDetector(
+                      onTap: widget.showRegisterPage,
+                      child: const Text(
+                        " Register Now!",
+                        style: TextStyle(color: Colors.blue),
+                      ),
                     )
                   ],
                 ),
