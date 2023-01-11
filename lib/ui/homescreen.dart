@@ -199,8 +199,8 @@ class _ContentPageState extends State<ContentPage> {
                       ),
                     ),
                       Positioned(
-                        right: 5.0,
-                        bottom: 5.0,
+                        right: 60.0,
+                        top: 40.0,
                         child: IconButton(
                           onPressed: (){},
                           icon: Icon(
@@ -211,8 +211,8 @@ class _ContentPageState extends State<ContentPage> {
                       ),
                       ),
                       Positioned(
-                        left: 5.0,
-                        bottom: 2.0,
+                        right: 15.0,
+                        top: 40.0,
                         child: IconButton(
                           onPressed: (){},
                           icon: Icon(
@@ -224,9 +224,9 @@ class _ContentPageState extends State<ContentPage> {
                       ),
                       Positioned(
                         right: 50,
-                          left: 52,
-                          bottom: 10,
-                          child: Text('INTERSTELLAR',style: TextStyle(fontSize: 32,fontFamily: 'SubstanceMedium',color: Colors.white)),),
+                          left: 50,
+                          bottom: 8,
+                          child: Text('INTERSTELLAR',style: TextStyle(fontSize: 30,fontFamily: 'SubstanceMedium',color: Colors.white)),),
                   ],
                   ),
                   Padding(

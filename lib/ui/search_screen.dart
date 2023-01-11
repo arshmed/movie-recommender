@@ -69,7 +69,7 @@ class _SearchMoviesState extends State<SearchMovies> {
                 ? Image.network(suggestion.poster_path)
                 : Image.network("https://www.subscription.co.uk/time/europe/Solo/Content/Images/noCover.gif"),
                 title: Text(suggestion.title, style: TextStyle(color: Colors.white),),
-                subtitle: Text("Release date : " + suggestion.release_date.substring(0,4), style: TextStyle(color: Colors.white),),
+                subtitle: Text("Release date : " + suggestion.release_date, style: TextStyle(color: Colors.white),),
               );
             },
             onSuggestionSelected: (suggestion){
