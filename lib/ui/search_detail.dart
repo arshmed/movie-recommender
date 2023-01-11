@@ -123,313 +123,557 @@ class _ContentPageState extends State<ContentPage> {
 
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
+    final user = FirebaseAuth.instance.currentUser;
 
-    return Container(
-      width: _width,
-      height: _height,
-      color: bgColor,
-      child: Stack(
-        children: [
-          Container(
-            height: 380,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.fitWidth,
-                alignment: FractionalOffset.topCenter,
-                image: NetworkImage(
-                    widget.product.poster_path.replaceAll("w185", "w400")),
-              ),
-            ),
-          ),
-          Positioned(
-            right: 15,
-            top: 40,
-            child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("users-fav-items")
-                    .doc(FirebaseAuth.instance.currentUser.email)
-                    .collection("movies")
-                    .where("name", isEqualTo: widget.product.title)
-                    .snapshots(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.data == null) {
-                    return Text("");
-                  }
-                  return IconButton(
-                      color: Colors.red,
-                      onPressed: () {
-                        if (snapshot.data.docs.length == 0)
-                          addFav();
-                        else {
-                          deleteFav();
-                        }
-                      },
-                      icon: snapshot.data.docs.length == 0
-                          ? Icon(
-                              Icons.favorite_border,
-                              color: Colors.white,
-                              size: 26,
-                            )
-                          : Icon(
-                              Icons.favorite,
-                              color: Colors.white,
-                              size: 26,
-                            ));
-                }),
-          ),
-          Positioned(
-            right: 60,
-            top: 40,
-            child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("users-watch-later")
-                    .doc(FirebaseAuth.instance.currentUser.email)
-                    .collection("movies")
-                    .where("name", isEqualTo: widget.product.title)
-                    .snapshots(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.data == null) {
-                    return Text("");
-                  }
-                  return IconButton(
-                      color: Colors.red,
-                      onPressed: () {
-                        if (snapshot.data.docs.length == 0)
-                          addWatchLater();
-                        else {
-                          deleteWatchLater();
-                        }
-                      },
-                      icon: snapshot.data.docs.length == 0
-                          ? Icon(
-                              Icons.bookmark_add_outlined,
-                              color: Colors.white,
-                              size: 26,
-                            )
-                          : Icon(
-                              Icons.bookmark_add,
-                              color: Colors.white,
-                              size: 26,
-                            ));
-                }),
-          ),
-          Positioned(
-            left: 15,
-            top: 40,
-            child: IconButton(
-                color: Colors.red,
-                onPressed: () => Navigator.pop(context),
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                  size: 22,
-                )),
-          ),
-          Positioned(
-            top: 320,
-            child: Container(
-              padding: EdgeInsets.only(left: 20, top: 8),
-              width: _width,
-              height: 80,
+    if (user == null) {
+      return Container(
+        width: _width,
+        height: _height,
+        color: bgColor,
+        child: Stack(
+          children: [
+            Container(
+              height: 380,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0.1, 0.3, 0.5, 0.7, 0.9],
-                  colors: [
-                    bgColor.withOpacity(0.01),
-                    bgColor.withOpacity(0.25),
-                    bgColor.withOpacity(0.6),
-                    bgColor.withOpacity(0.9),
-                    bgColor,
-                  ],
+                image: DecorationImage(
+                  fit: BoxFit.fitWidth,
+                  alignment: FractionalOffset.topCenter,
+                  image: NetworkImage(
+                      widget.product.poster_path.replaceAll("w185", "w400")),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: 330,
-            left: 20,
-            child: Container(
-              width: _width - 20,
-              child: Text(
-                widget.product.title,
-                style: TextStyle(
+            Positioned(
+              left: 15,
+              top: 40,
+              child: IconButton(
+                  color: Colors.red,
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(
+                    Icons.arrow_back_ios,
                     color: Colors.white,
-                    fontSize: 20,
+                    size: 22,
+                  )),
+            ),
+            Positioned(
+              top: 320,
+              child: Container(
+                padding: EdgeInsets.only(left: 20, top: 8),
+                width: _width,
+                height: 80,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [0.1, 0.3, 0.5, 0.7, 0.9],
+                    colors: [
+                      bgColor.withOpacity(0.01),
+                      bgColor.withOpacity(0.25),
+                      bgColor.withOpacity(0.6),
+                      bgColor.withOpacity(0.9),
+                      bgColor,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 330,
+              left: 20,
+              child: Container(
+                width: _width - 20,
+                child: Text(
+                  widget.product.title,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 22,
+              top: 380,
+              child: Text(
+                widget.product.release_date.substring(0, 4),
+                style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
             ),
-          ),
-          Positioned(
-            left: 22,
-            top: 380,
-            child: Text(
-              widget.product.release_date.substring(0, 4),
-              style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Positioned(
-            top: 410,
-            child: Container(
-              width: _width,
-              height: MediaQuery.of(context).size.height - 370,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width - 40,
-                      height: 0.5,
-                      color: textColor,
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 20),
-                      width: MediaQuery.of(context).size.width,
-                      height: 90,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: (MediaQuery.of(context).size.width - 40) / 3,
-                            height: 120,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  // Text(widget.product.popularity.toStringAsFixed(2), style: TextStyle(color: popularityColor, fontSize: 24, fontWeight: FontWeight.bold),),
-                                  // Text('Popularity', style: TextStyle(color: Colors.white, ),),
-                                  //Text(widget.product.release_date.substring(0,4), style: TextStyle(color: Colors.blue, fontSize: 24, fontWeight: FontWeight.bold),)
-                                  Text(
-                                    widget.product.popularity
-                                        .toStringAsFixed(0),
-                                    style: TextStyle(
-                                        color: Colors.green,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    'Popularity',
-                                    style: TextStyle(
-                                      color: Colors.white,
+            Positioned(
+              top: 410,
+              child: Container(
+                width: _width,
+                height: MediaQuery.of(context).size.height - 370,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width - 40,
+                        height: 0.5,
+                        color: textColor,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 20),
+                        width: MediaQuery.of(context).size.width,
+                        height: 90,
+                        child: Row(
+                          children: [
+                            Container(
+                              width:
+                                  (MediaQuery.of(context).size.width - 40) / 3,
+                              height: 120,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    // Text(widget.product.popularity.toStringAsFixed(2), style: TextStyle(color: popularityColor, fontSize: 24, fontWeight: FontWeight.bold),),
+                                    // Text('Popularity', style: TextStyle(color: Colors.white, ),),
+                                    //Text(widget.product.release_date.substring(0,4), style: TextStyle(color: Colors.blue, fontSize: 24, fontWeight: FontWeight.bold),)
+                                    Text(
+                                      widget.product.popularity
+                                          .toStringAsFixed(0),
+                                      style: TextStyle(
+                                          color: Colors.green,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: (MediaQuery.of(context).size.width - 40) / 3,
-                            height: 120,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.star,
-                                    color: iconColor,
-                                    size: 28,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: widget.product.vote_average
-                                          .toString(),
+                                    Text(
+                                      'Popularity',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 18,
                                       ),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: ' / 10',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width:
+                                  (MediaQuery.of(context).size.width - 40) / 3,
+                              height: 120,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.star,
+                                      color: iconColor,
+                                      size: 28,
+                                    ),
+                                    RichText(
+                                      text: TextSpan(
+                                        text: widget.product.vote_average
+                                            .toString(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
                                         ),
-                                      ],
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: ' / 10',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Container(
-                            width: (MediaQuery.of(context).size.width - 40) / 3,
-                            height: 120,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    widget.product.vote_count,
-                                    style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    'Vote Count',
-                                    style: TextStyle(
-                                      color: Colors.white,
+                            Container(
+                              width:
+                                  (MediaQuery.of(context).size.width - 40) / 3,
+                              height: 120,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      widget.product.vote_count,
+                                      style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      'Vote Count',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 5),
-                      width: MediaQuery.of(context).size.width - 40,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            'Description',
-                            style: TextStyle(
+                      Container(
+                        margin: EdgeInsets.only(top: 5),
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              'Description',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              widget.product.overview,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              'Trailers',
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 24,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            widget.product.overview,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            'Trailers',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                            SizedBox(
+                              height: 16,
                             ),
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          PreLoadContent(widget.product.id),
-                        ],
+                            PreLoadContent(widget.product.id),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        width: _width,
+        height: _height,
+        color: bgColor,
+        child: Stack(
+          children: [
+            Container(
+              height: 380,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fitWidth,
+                  alignment: FractionalOffset.topCenter,
+                  image: NetworkImage(
+                      widget.product.poster_path.replaceAll("w185", "w400")),
+                ),
+              ),
+            ),
+            Positioned(
+              right: 15,
+              top: 40,
+              child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("users-fav-items")
+                      .doc(FirebaseAuth.instance.currentUser.email)
+                      .collection("movies")
+                      .where("name", isEqualTo: widget.product.title)
+                      .snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.data == null) {
+                      return Text("");
+                    }
+                    return IconButton(
+                        color: Colors.red,
+                        onPressed: () {
+                          if (snapshot.data.docs.length == 0)
+                            addFav();
+                          else {
+                            deleteFav();
+                          }
+                        },
+                        icon: snapshot.data.docs.length == 0
+                            ? Icon(
+                                Icons.favorite_border,
+                                color: Colors.white,
+                                size: 26,
+                              )
+                            : Icon(
+                                Icons.favorite,
+                                color: Colors.white,
+                                size: 26,
+                              ));
+                  }),
+            ),
+            Positioned(
+              right: 60,
+              top: 40,
+              child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("users-watch-later")
+                      .doc(FirebaseAuth.instance.currentUser.email)
+                      .collection("movies")
+                      .where("name", isEqualTo: widget.product.title)
+                      .snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.data == null) {
+                      return Text("");
+                    }
+                    return IconButton(
+                        color: Colors.red,
+                        onPressed: () {
+                          if (snapshot.data.docs.length == 0)
+                            addWatchLater();
+                          else {
+                            deleteWatchLater();
+                          }
+                        },
+                        icon: snapshot.data.docs.length == 0
+                            ? Icon(
+                                Icons.bookmark_add_outlined,
+                                color: Colors.white,
+                                size: 26,
+                              )
+                            : Icon(
+                                Icons.bookmark_add,
+                                color: Colors.white,
+                                size: 26,
+                              ));
+                  }),
+            ),
+            Positioned(
+              left: 15,
+              top: 40,
+              child: IconButton(
+                  color: Colors.red,
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                    size: 22,
+                  )),
+            ),
+            Positioned(
+              top: 320,
+              child: Container(
+                padding: EdgeInsets.only(left: 20, top: 8),
+                width: _width,
+                height: 80,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [0.1, 0.3, 0.5, 0.7, 0.9],
+                    colors: [
+                      bgColor.withOpacity(0.01),
+                      bgColor.withOpacity(0.25),
+                      bgColor.withOpacity(0.6),
+                      bgColor.withOpacity(0.9),
+                      bgColor,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 330,
+              left: 20,
+              child: Container(
+                width: _width - 20,
+                child: Text(
+                  widget.product.title,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 22,
+              top: 380,
+              child: Text(
+                widget.product.release_date.substring(0, 4),
+                style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Positioned(
+              top: 410,
+              child: Container(
+                width: _width,
+                height: MediaQuery.of(context).size.height - 370,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width - 40,
+                        height: 0.5,
+                        color: textColor,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 20),
+                        width: MediaQuery.of(context).size.width,
+                        height: 90,
+                        child: Row(
+                          children: [
+                            Container(
+                              width:
+                                  (MediaQuery.of(context).size.width - 40) / 3,
+                              height: 120,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    // Text(widget.product.popularity.toStringAsFixed(2), style: TextStyle(color: popularityColor, fontSize: 24, fontWeight: FontWeight.bold),),
+                                    // Text('Popularity', style: TextStyle(color: Colors.white, ),),
+                                    //Text(widget.product.release_date.substring(0,4), style: TextStyle(color: Colors.blue, fontSize: 24, fontWeight: FontWeight.bold),)
+                                    Text(
+                                      widget.product.popularity
+                                          .toStringAsFixed(0),
+                                      style: TextStyle(
+                                          color: Colors.green,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      'Popularity',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width:
+                                  (MediaQuery.of(context).size.width - 40) / 3,
+                              height: 120,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.star,
+                                      color: iconColor,
+                                      size: 28,
+                                    ),
+                                    RichText(
+                                      text: TextSpan(
+                                        text: widget.product.vote_average
+                                            .toString(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                        ),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: ' / 10',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width:
+                                  (MediaQuery.of(context).size.width - 40) / 3,
+                              height: 120,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      widget.product.vote_count,
+                                      style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      'Vote Count',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 5),
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              'Description',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              widget.product.overview,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              'Trailers',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            PreLoadContent(widget.product.id),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
 
