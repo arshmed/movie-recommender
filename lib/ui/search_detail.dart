@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moviee/model/genre_model.dart';
@@ -8,7 +10,6 @@ import 'colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SearchDetail extends StatefulWidget {
-
   dynamic product;
   SearchDetail(this.product);
 
@@ -20,7 +21,6 @@ String backdrop_path = "";
 String genres = "";
 
 class _SearchDetailState extends State<SearchDetail> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -32,25 +32,23 @@ class _SearchDetailState extends State<SearchDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ContentPage(widget.product,genres),
+      body: ContentPage(widget.product, genres),
     );
   }
 }
 
-_launchURL(String _url) async{
-  if(await canLaunch(_url)){
+_launchURL(String _url) async {
+  if (await canLaunch(_url)) {
     await launch(_url);
-  }
-  else{
+  } else {
     throw 'Could not launch $_url';
   }
 }
 
 class ContentPage extends StatefulWidget {
-
   dynamic product;
   String genres;
-  ContentPage(this.product,this.genres);
+  ContentPage(this.product, this.genres);
 
   @override
   State<ContentPage> createState() => _ContentPageState();
@@ -59,6 +57,69 @@ class ContentPage extends StatefulWidget {
 class _ContentPageState extends State<ContentPage> {
   @override
   Widget build(BuildContext context) {
+    Future deleteFav() async {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      var currentUser = _auth.currentUser;
+      CollectionReference _collectionRef =
+          FirebaseFirestore.instance.collection("users-fav-items");
+
+      return _collectionRef
+          .doc(currentUser.email)
+          .collection("movies")
+          .doc(widget.product.title)
+          .delete()
+          .then((value) => print("Deleted from watch-later"));
+    }
+
+    Future deleteWatchLater() async {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      var currentUser = _auth.currentUser;
+      CollectionReference _collectionRef =
+          FirebaseFirestore.instance.collection("users-watch-later");
+
+      return _collectionRef
+          .doc(currentUser.email)
+          .collection("movies")
+          .doc(widget.product.title)
+          .delete()
+          .then((value) => print("Deleted from watch-laters"));
+    }
+
+    Future addFav() async {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      var currentUser = _auth.currentUser;
+      CollectionReference _collectionRef =
+          FirebaseFirestore.instance.collection("users-fav-items");
+
+      return _collectionRef
+          .doc(currentUser.email)
+          .collection("movies")
+          .doc(widget.product.title)
+          .set({
+        "name": widget.product.title,
+        "images": widget.product.poster_path,
+        "genre": widget.product.genre_ids,
+        "score": widget.product.vote_average,
+      }).then((value) => print("Added to favourites."));
+    }
+
+    Future addWatchLater() async {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      var currentUser = _auth.currentUser;
+      CollectionReference _collectionRef =
+          FirebaseFirestore.instance.collection("users-watch-later");
+
+      return _collectionRef
+          .doc(currentUser.email)
+          .collection("movies")
+          .doc(widget.product.title)
+          .set({
+        "name": widget.product.title,
+        "images": widget.product.poster_path,
+        "genre": widget.product.genre_ids,
+        "score": widget.product.vote_average,
+      }).then((value) => print("Added to watch later."));
+    }
 
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
@@ -75,9 +136,82 @@ class _ContentPageState extends State<ContentPage> {
               image: DecorationImage(
                 fit: BoxFit.fitWidth,
                 alignment: FractionalOffset.topCenter,
-                image: NetworkImage(widget.product.poster_path.replaceAll("w185", "w400")),
+                image: NetworkImage(
+                    widget.product.poster_path.replaceAll("w185", "w400")),
               ),
             ),
+          ),
+          Positioned(
+            right: 15,
+            top: 40,
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("users-fav-items")
+                    .doc(FirebaseAuth.instance.currentUser.email)
+                    .collection("movies")
+                    .where("name", isEqualTo: widget.product.title)
+                    .snapshots(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.data == null) {
+                    return Text("");
+                  }
+                  return IconButton(
+                      color: Colors.red,
+                      onPressed: () {
+                        if (snapshot.data.docs.length == 0)
+                          addFav();
+                        else {
+                          deleteFav();
+                        }
+                      },
+                      icon: snapshot.data.docs.length == 0
+                          ? Icon(
+                              Icons.favorite_border,
+                              color: Colors.white,
+                              size: 26,
+                            )
+                          : Icon(
+                              Icons.favorite,
+                              color: Colors.white,
+                              size: 26,
+                            ));
+                }),
+          ),
+          Positioned(
+            right: 60,
+            top: 40,
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("users-watch-later")
+                    .doc(FirebaseAuth.instance.currentUser.email)
+                    .collection("movies")
+                    .where("name", isEqualTo: widget.product.title)
+                    .snapshots(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.data == null) {
+                    return Text("");
+                  }
+                  return IconButton(
+                      color: Colors.red,
+                      onPressed: () {
+                        if (snapshot.data.docs.length == 0)
+                          addWatchLater();
+                        else {
+                          deleteWatchLater();
+                        }
+                      },
+                      icon: snapshot.data.docs.length == 0
+                          ? Icon(
+                              Icons.bookmark_add_outlined,
+                              color: Colors.white,
+                              size: 26,
+                            )
+                          : Icon(
+                              Icons.bookmark_add,
+                              color: Colors.white,
+                              size: 26,
+                            ));
+                }),
           ),
           Positioned(
             left: 15,
@@ -85,8 +219,11 @@ class _ContentPageState extends State<ContentPage> {
             child: IconButton(
                 color: Colors.red,
                 onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.arrow_back_ios,  color: Colors.white, size: 22,)
-            ),
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: 22,
+                )),
           ),
           Positioned(
             top: 320,
@@ -115,24 +252,36 @@ class _ContentPageState extends State<ContentPage> {
             left: 20,
             child: Container(
               width: _width - 20,
-              child: Text(widget.product.title, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+              child: Text(
+                widget.product.title,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           Positioned(
             left: 22,
             top: 380,
-            child: Text(widget.product.release_date.substring(0,4), style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.bold),),
+            child: Text(
+              widget.product.release_date.substring(0, 4),
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
           Positioned(
             top: 410,
             child: Container(
               width: _width,
-              height: MediaQuery.of(context).size.height-370,
+              height: MediaQuery.of(context).size.height - 370,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width -40,
+                      width: MediaQuery.of(context).size.width - 40,
                       height: 0.5,
                       color: textColor,
                     ),
@@ -143,7 +292,7 @@ class _ContentPageState extends State<ContentPage> {
                       child: Row(
                         children: [
                           Container(
-                            width: (MediaQuery.of(context).size.width -40) / 3,
+                            width: (MediaQuery.of(context).size.width - 40) / 3,
                             height: 120,
                             child: Center(
                               child: Column(
@@ -152,14 +301,26 @@ class _ContentPageState extends State<ContentPage> {
                                   // Text(widget.product.popularity.toStringAsFixed(2), style: TextStyle(color: popularityColor, fontSize: 24, fontWeight: FontWeight.bold),),
                                   // Text('Popularity', style: TextStyle(color: Colors.white, ),),
                                   //Text(widget.product.release_date.substring(0,4), style: TextStyle(color: Colors.blue, fontSize: 24, fontWeight: FontWeight.bold),)
-                                  Text(widget.product.popularity.toStringAsFixed(0), style: TextStyle(color: Colors.green, fontSize: 24, fontWeight: FontWeight.bold),),
-                                  Text('Popularity', style: TextStyle(color: Colors.white, ),),
+                                  Text(
+                                    widget.product.popularity
+                                        .toStringAsFixed(0),
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    'Popularity',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
                           ),
                           Container(
-                            width: (MediaQuery.of(context).size.width -40) / 3,
+                            width: (MediaQuery.of(context).size.width - 40) / 3,
                             height: 120,
                             child: Center(
                               child: Column(
@@ -172,7 +333,8 @@ class _ContentPageState extends State<ContentPage> {
                                   ),
                                   RichText(
                                     text: TextSpan(
-                                      text: widget.product.vote_average.toString(),
+                                      text: widget.product.vote_average
+                                          .toString(),
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -181,8 +343,8 @@ class _ContentPageState extends State<ContentPage> {
                                         TextSpan(
                                           text: ' / 10',
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: 18
-                                          ),
+                                              color: Colors.white,
+                                              fontSize: 18),
                                         ),
                                       ],
                                     ),
@@ -192,15 +354,25 @@ class _ContentPageState extends State<ContentPage> {
                             ),
                           ),
                           Container(
-                            width: (MediaQuery.of(context).size.width -40) / 3,
+                            width: (MediaQuery.of(context).size.width - 40) / 3,
                             height: 120,
                             child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-
-                                  Text(widget.product.vote_count, style: TextStyle(color: Colors.blue, fontSize: 24, fontWeight: FontWeight.bold),),
-                                  Text('Vote Count', style: TextStyle(color: Colors.white, ),),
+                                  Text(
+                                    widget.product.vote_count,
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    'Vote Count',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -210,7 +382,7 @@ class _ContentPageState extends State<ContentPage> {
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 5),
-                      width: MediaQuery.of(context).size.width -40,
+                      width: MediaQuery.of(context).size.width - 40,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.max,
@@ -222,7 +394,9 @@ class _ContentPageState extends State<ContentPage> {
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 5,),
+                          SizedBox(
+                            height: 5,
+                          ),
                           Text(
                             widget.product.overview,
                             style: TextStyle(
@@ -230,15 +404,20 @@ class _ContentPageState extends State<ContentPage> {
                               fontSize: 14,
                             ),
                           ),
-                          SizedBox(height: 16,),
-                          Text('Trailers',
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            'Trailers',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 16,),
+                          SizedBox(
+                            height: 16,
+                          ),
                           PreLoadContent(widget.product.id),
                         ],
                       ),
@@ -255,7 +434,6 @@ class _ContentPageState extends State<ContentPage> {
 }
 
 class GenresItems extends StatefulWidget {
-
   String genres;
   GenresItems(this.genres);
 
@@ -269,7 +447,7 @@ class _GenresItemsState extends State<GenresItems> {
     return FutureBuilder(
         future: _getGenres(widget.genres),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          switch(snapshot.connectionState) {
+          switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
               return Container();
@@ -279,41 +457,41 @@ class _GenresItemsState extends State<GenresItems> {
               else
                 return GetGenres(snapshot);
           }
-        }
+        });
+  }
+
+  Widget GenreItem(String genre) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.white),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Padding(
+        padding:
+            const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5.0),
+        child: Text(
+          genre,
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
     );
   }
 
-  Widget GenreItem(String genre){
-    return
-      Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left:10, right: 10, top: 5, bottom: 5.0),
-          child: Text(genre, style: TextStyle(color: Colors.white),),
-        ),
-      );
-
-  }
-
   Future<List<Widget>> _getGenres(String genre) async {
-    var values =  List<Widget>();
+    var values = List<Widget>();
     var items = genre.split(',');
 
-    for(int i=0; i<items.length; i++){
-      if(i < 3)
-        values.add(GenreItem(items[i]));
+    for (int i = 0; i < items.length; i++) {
+      if (i < 3) values.add(GenreItem(items[i]));
     }
     await Future.delayed(Duration(seconds: 0));
     return values;
   }
 
-  Widget GetGenres(AsyncSnapshot snapshot){
+  Widget GetGenres(AsyncSnapshot snapshot) {
     List<Widget> values = snapshot.data;
     return Container(
-      width: MediaQuery.of(context).size.width -40,
+      width: MediaQuery.of(context).size.width - 40,
       child: Wrap(
         direction: Axis.horizontal,
         runSpacing: 8,
@@ -323,11 +501,9 @@ class _GenresItemsState extends State<GenresItems> {
       ),
     );
   }
-
 }
 
 class PreLoadContent extends StatefulWidget {
-
   int movieId;
   PreLoadContent(this.movieId);
 
@@ -341,33 +517,33 @@ class _PreLoadContentState extends State<PreLoadContent> {
     bloc_trailer.fetchAllTrailers(widget.movieId);
     return StreamBuilder(
       stream: bloc_trailer.allTrailers,
-      builder: (context, AsyncSnapshot<TrailerModel> snapshot){
-        if(snapshot.hasData){
-          if(snapshot.data.results.length > 0){
-            int itemRowCount = (snapshot.data.results.length/2).round();
+      builder: (context, AsyncSnapshot<TrailerModel> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.results.length > 0) {
+            int itemRowCount = (snapshot.data.results.length / 2).round();
             double _height = itemRowCount * 175.0;
             return Container(
               width: MediaQuery.of(context).size.width - 40,
               height: _height,
               child: TrailerPage(snapshot),
             );
-          }
-          else return Text(
-            'Not Found Trailer',
-            style: TextStyle(color: Colors.white),
-          );
-        }
-        else if(snapshot.hasError){
+          } else
+            return Text(
+              'Not Found Trailer',
+              style: TextStyle(color: Colors.white),
+            );
+        } else if (snapshot.hasError) {
           return Text(snapshot.error.toString());
         }
-        return Center(child: CircularProgressIndicator(),);
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }
 }
 
 class TrailerPage extends StatefulWidget {
-
   AsyncSnapshot<TrailerModel> snapshot;
   TrailerPage(this.snapshot);
 
@@ -378,7 +554,7 @@ class TrailerPage extends StatefulWidget {
 class _TrailerPageState extends State<TrailerPage> {
   @override
   Widget build(BuildContext context) {
-    double itemWidth = (MediaQuery.of(context).size.width -16) / 2;
+    double itemWidth = (MediaQuery.of(context).size.width - 16) / 2;
     return GridView.count(
       padding: EdgeInsets.all(0),
       crossAxisCount: 2,
@@ -386,49 +562,51 @@ class _TrailerPageState extends State<TrailerPage> {
       crossAxisSpacing: 16,
       mainAxisSpacing: 22,
       physics: NeverScrollableScrollPhysics(),
-      children: List<Widget>.generate(widget.snapshot.data.results.length, (index) {
-        return GridTile(
-          child: InkWell(
-            onTap: () => _launchURL("https://www.youtube.com/watch?v=" + widget.snapshot.data.results[index].key),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: InkWell(
-                onTap: () => _launchURL("https://www.youtube.com/watch?v=" + widget.snapshot.data.results[index].key),
-                child: Wrap(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom:5),
-                      child: Stack(
-                        children: [
-                          Image.network(backdrop_path),
-                          Container(
-                            width: itemWidth,
-                            height: 100,
-                            color: Colors.black38,
-                          ),
-                          Positioned(
-                            top:36,
-                            left: (itemWidth -36 -16) / 2,
-                            child: Icon(Icons.play_circle_filled,size: 36,color:Colors.white),
-                          ),
-                        ],
+      children: List<Widget>.generate(
+        widget.snapshot.data.results.length,
+        (index) {
+          return GridTile(
+            child: InkWell(
+              onTap: () => _launchURL("https://www.youtube.com/watch?v=" +
+                  widget.snapshot.data.results[index].key),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () => _launchURL("https://www.youtube.com/watch?v=" +
+                      widget.snapshot.data.results[index].key),
+                  child: Wrap(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(bottom: 5),
+                        child: Stack(
+                          children: [
+                            Image.network(backdrop_path),
+                            Container(
+                              width: itemWidth,
+                              height: 100,
+                              color: Colors.black38,
+                            ),
+                            Positioned(
+                              top: 36,
+                              left: (itemWidth - 36 - 16) / 2,
+                              child: Icon(Icons.play_circle_filled,
+                                  size: 36, color: Colors.white),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Text(
-                      widget.snapshot.data.results[index].name,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
+                      Text(
+                        widget.snapshot.data.results[index].name,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
       ),
     );
   }
 }
-
-
-

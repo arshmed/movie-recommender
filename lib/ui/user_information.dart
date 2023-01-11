@@ -38,7 +38,6 @@ class UserInformationState extends State<UserInformation> {
                       itemCount: snap.length,
                       itemBuilder: (context, index) {
                         return Container(
-                          margin: EdgeInsets.only(left: 60),
                           height: 500,
                           width: double.infinity,
                           decoration: BoxDecoration(
