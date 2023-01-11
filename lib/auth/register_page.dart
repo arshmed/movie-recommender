@@ -51,16 +51,22 @@ class _RegisterPageState extends State<RegisterPage> {
 
       //add user info.
       addUserDetails(
-          _firstNameController.text.trim(),
-          _lastNameController.text.trim(),
-          _emailController.text.trim(),
-          int.parse(_ageController.text.trim()));
+        _firstNameController.text.trim(),
+        _lastNameController.text.trim(),
+        _emailController.text.trim(),
+        int.parse(_ageController.text.trim()),
+      );
     }
   }
 
   Future addUserDetails(
       String firstName, String lastName, String email, int age) async {
-    await FirebaseFirestore.instance.collection('users').add({
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(email)
+        .collection("informations")
+        .doc("email")
+        .set({
       "first name": firstName,
       "last name": lastName,
       "email": email,
@@ -249,7 +255,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                          color: Colors.deepPurple,
+                          color: Colors.blueAccent,
                           borderRadius: BorderRadius.circular(12)),
                       child: const Center(
                         child: Text(
@@ -283,6 +289,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     )
                   ],
                 ),
+                const SizedBox(
+                  height: 50,
+                )
               ],
             ),
           ),

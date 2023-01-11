@@ -15,7 +15,6 @@ class LoginMainPage extends StatelessWidget {
     return Scaffold(
       body: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
-
           // snapshot user hakkında bilgi verir
 
           builder: (context, snapshot) {
