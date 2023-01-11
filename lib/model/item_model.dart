@@ -45,13 +45,17 @@ class Result{
     vote_average=result['vote_average'];
     title=result['title'].toString();
     popularity=result['popularity'];
-    poster_path="https://image.tmdb.org/t/p/w185/"+result['poster_path'].toString();
+    poster_path=result['poster_path'] == null
+        ? "https://www.subscription.co.uk/time/europe/Solo/Content/Images/noCover.gif"
+        : "https://image.tmdb.org/t/p/w185/"+result['poster_path'].toString();
 
     for(var i=0; i<result['genre_ids'].length; i++){
       genre_ids.add(result['genre_ids'][i]);
     }
 
-    backdrop_path="https://image.tmdb.org/t/p/w185/"+result['backdrop_path'].toString();
+    backdrop_path= result['poster_path'] == null
+        ? "https://image.tmdb.org/t/p/w185/${result['poster_path']}"
+        : "https://image.tmdb.org/t/p/w185/"+result['backdrop_path'].toString();
     adult = result['adult'];
     overview=result['overview'];
     release_date=result['release_date'].toString();

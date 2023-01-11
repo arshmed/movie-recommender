@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:moviee/ui/search_screen.dart';
 import '../auth/main_page.dart';
 import '../ui/homescreen.dart';
 
@@ -16,8 +17,9 @@ class _MainPageState extends State<MainPage> {
   int index = 0;
   final screens = [
     HomeScreen(),
-    LoginMainPage(),
+    Search(),
     Lucky(),
+    LoginMainPage(),
   ];
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -44,18 +46,18 @@ class _MainPageState extends State<MainPage> {
                   selectedIcon: Icon(Icons.home),
                   label: "Home"),
               NavigationDestination(
-                  icon: Icon(Icons.person, color: Colors.grey),
-                  selectedIcon: Icon(Icons.person),
-                  label: "Profile"),
+                  icon: Icon(Icons.search, color: Colors.grey),
+                  selectedIcon: Icon(Icons.search),
+                  label: "Search"),
               NavigationDestination(
                   icon: Icon(Icons.sentiment_very_satisfied_outlined,
                       color: Colors.grey),
                   selectedIcon: Icon(Icons.sentiment_very_satisfied_outlined),
                   label: "I feel lucky"),
               NavigationDestination(
-                  icon: Icon(Icons.search, color: Colors.grey),
-                  selectedIcon: Icon(Icons.search),
-                  label: "Search"),
+                  icon: Icon(Icons.person, color: Colors.grey),
+                  selectedIcon: Icon(Icons.person),
+                  label: "Profile"),
             ],
           ),
         ),
