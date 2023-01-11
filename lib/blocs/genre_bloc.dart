@@ -16,8 +16,6 @@ class GenreBloc{
     movieFetcher.sink.add(itemModel);
   }
 
-
-
   dispose(){
     movieFetcher.close();
   }

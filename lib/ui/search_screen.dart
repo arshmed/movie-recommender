@@ -81,38 +81,6 @@ class _SearchMoviesState extends State<SearchMovies> {
           ),
           SizedBox(height: 6,),
           Divider(color: textColor, thickness: 1),
-          SizedBox(height: 60,),
-          Container(
-            //color: Colors.red,
-            height: 300,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                InkWell(
-                  onTap: (){
-                    print("clicked");
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    height: 40,
-                    width: 300,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: Text(
-                        "Select an IMDB Rating",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:moviee/blocs/genre_bloc.dart';
 import 'package:moviee/blocs/movies_bloc.dart';
 import 'package:moviee/ui/movie_detail.dart';
+import 'package:moviee/ui/recommended_movie.dart';
 import '../model/genre_model.dart';
 import '../model/item_model.dart';
 import 'colors.dart';
@@ -167,10 +168,12 @@ class _ContentPageState extends State<ContentPage> {
     bloc.fetchAllTopRatedMovies();
     bloc.fetchAllUpcomingMovies();
     bloc.fetchAllNowPlayingMovies();
+    bloc.fetchInterstellar();
     return SingleChildScrollView(
       child: Column(
         children: [
-          Stack(children: [
+          Stack(
+            children: [
             Container(
               width: MediaQuery.of(context).size.width,
               height: 1330,
@@ -182,7 +185,7 @@ class _ContentPageState extends State<ContentPage> {
                   Stack(
                     children: [
                       Container(
-                      child: StreamBuilder(stream: bloc.allMovies, builder: (context, AsyncSnapshot<ItemModel> snapshot){
+                      child: StreamBuilder(stream: bloc.interstellar, builder: (context, AsyncSnapshot<ItemModel> snapshot){
                         if(snapshot.hasData){
                           return Container(
                             height: 320,
@@ -198,36 +201,22 @@ class _ContentPageState extends State<ContentPage> {
                       }
                       ),
                     ),
-                      Positioned(
-                        right: 60.0,
-                        top: 40.0,
-                        child: IconButton(
-                          onPressed: (){},
-                          icon: Icon(
-                        Icons.add,
-                          size: 36,
-                          color: Colors.white,
-                      ),
-                      ),
-                      ),
-                      Positioned(
-                        right: 15.0,
-                        top: 40.0,
-                        child: IconButton(
-                          onPressed: (){},
-                          icon: Icon(
-                            Icons.favorite_border,
-                            size: 28,
-                            color: Colors.white,
-                          ),
+                      Container(
+                        padding: EdgeInsets.all(3),
+                        margin: EdgeInsets.only(left:20, top: 45),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          color: Colors.black
                         ),
+                        child: Image.asset("images/logo2_2.png", height: 30, width: 30,),
                       ),
                       Positioned(
                         right: 50,
                           left: 50,
                           bottom: 8,
                           child: Text('INTERSTELLAR',style: TextStyle(fontSize: 30,fontFamily: 'SubstanceMedium',color: Colors.white)),),
-                  ],
+
+                    ],
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -357,18 +346,25 @@ class _ItemsLoadState extends State<ItemsLoad> {
 
   @override
   Widget build(BuildContext context) {
-    Random random =  Random();
-    int randomNumber = random.nextInt(5);
     return Column(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(20.0),
-          child: Image.network(
-              'https://media.idownloadblog.com/wp-content/uploads/2014/12/interstellar-wide-space-film-movie-art-9-wallpaper.jpg',
-            //widget.snapshot.data.results[randomNumber].poster_path,
-            height: 320,
-            width: double.infinity,
-            fit: BoxFit.fill,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecommendedMovie(widget.snapshot.data.results[0], null),
+                ),
+              );
+              },
+            child: Image.network(
+                'https://media.idownloadblog.com/wp-content/uploads/2014/12/interstellar-wide-space-film-movie-art-9-wallpaper.jpg',
+              height: 320,
+              width: double.infinity,
+              fit: BoxFit.fill,
+            ),
           ),
         ),
       ],
