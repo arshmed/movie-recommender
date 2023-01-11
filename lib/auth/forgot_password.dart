@@ -54,6 +54,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       ),
       body: Column(
         children: [
+          const SizedBox(
+            height: 25,
+          ),
           Center(
             child: GradientText(
               'MOVIEE',
@@ -67,6 +70,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               ],
             ),
           ),
+          const SizedBox(
+            height: 50,
+          ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
             child: Text(
@@ -76,7 +82,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),
           ),
           const SizedBox(
-            height: 10,
+            height: 20,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -97,10 +103,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               ),
             ),
           ),
-          MaterialButton(
-            onPressed: () => passwordReset(),
-            child: const Text("Reset Password!"),
-            color: Colors.deepPurple[200],
+          const SizedBox(
+            height: 20,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(12)),
+            child: MaterialButton(
+              onPressed: () => passwordReset(),
+              child: const Text("Reset Password!"),
+            ),
           )
         ],
       ),
