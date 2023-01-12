@@ -38,7 +38,7 @@ class UserWatchLatersState extends State<UserWatchLaters> {
                       itemCount: snap.length,
                       itemBuilder: (context, index) {
                         return Container(
-                          margin: EdgeInsets.only(left: 5),
+                          margin: EdgeInsets.only(left: 5, top: 20),
                           height: 100,
                           width: double.infinity,
                           decoration: BoxDecoration(

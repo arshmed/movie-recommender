@@ -48,12 +48,12 @@ class _SearchMoviesState extends State<SearchMovies> {
           Text("Search", style: TextStyle(fontSize: 30, color: Colors.white),),
           SizedBox(height: 8,),
           TypeAheadField(
-            textFieldConfiguration: TextFieldConfiguration(
+            textFieldConfiguration: TextFieldConfiguration( 
               controller: _typeAheadController,
               autofocus: true,
               style: TextStyle(color: textColor, fontSize: 28),
               decoration: InputDecoration.collapsed(
-                hintText: "Movie,Actors, Directors...",
+                hintText: "Movies...",
                 hintStyle: TextStyle(color: textColor,fontSize: 24),
               ),
             ),
