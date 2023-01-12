@@ -208,7 +208,7 @@ class _ContentPageState extends State<ContentPage> {
                           borderRadius: BorderRadius.circular(5.0),
                           color: Colors.black
                         ),
-                        child: Image.asset("images/logo2_2.png", height: 30, width: 30,),
+                        child: Image.asset("images/playstore.png", height: 30, width: 30,),
                       ),
                       Positioned(
                         right: 50,

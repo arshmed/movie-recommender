@@ -66,10 +66,7 @@ class _UserFavoritesState extends State<UserFavorites> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
+                                        width: 250,
                                         child: Text(
                                           snap[index]["name"],
                                           style: TextStyle(

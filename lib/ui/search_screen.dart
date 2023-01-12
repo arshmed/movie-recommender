@@ -62,9 +62,8 @@ class _SearchMoviesState extends State<SearchMovies> {
             },
             itemBuilder: (context, suggestion){
               return ListTile(
-                hoverColor: Colors.red,
-                focusColor: Colors.grey,
                 tileColor: Colors.black,
+                selectedTileColor: Colors.black,
                 leading: suggestion.poster_path != null
                 ? Image.network(suggestion.poster_path)
                 : Image.network("https://www.subscription.co.uk/time/europe/Solo/Content/Images/noCover.gif"),
@@ -83,6 +82,7 @@ class _SearchMoviesState extends State<SearchMovies> {
           Divider(color: textColor, thickness: 1),
         ],
       ),
+
     );
   }
 }
