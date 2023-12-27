@@ -28,7 +28,7 @@ The semester project for Mobile Programming course that offers the user the oppo
 | :-------- | :------- | :-------------------------------- |
 | `seaarch` | `string` | search |
 | `query` | `string` | movie name |
-| `id`      | `string` | API key. |
+| `api_key`      | `string` | API key. |
 
 
 #### Returns category list
@@ -40,7 +40,7 @@ The semester project for Mobile Programming course that offers the user the oppo
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `list` | `string` | list |
-| `id`      | `string` | API key. |
+| `api_key`      | `string` | API key. |
 
 
 #### Returns Trailer of specified movie
@@ -52,7 +52,7 @@ The semester project for Mobile Programming course that offers the user the oppo
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `id` | `string` | movie id |
-| `id`      | `string` | API key. |![icon]
+| `api_key`      | `string` | API key. |![icon]
 
 
   
